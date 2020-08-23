@@ -37,17 +37,23 @@ class TodoOne(APIView):
     """List a particular todo, updates the content
     of  a particular todo or delete the todo"""
     def get(self, request, todo_pk):
-        todo = Todo.objects.get(pk=todo_pk)
-        todo_data = TodoSerializer(todo)
-        return Response(todo_data.data)
+        try:
+            todo = Todo.objects.get(pk=todo_pk)
+            todo_data = TodoSerializer(todo)
+            return Response(todo_data.data, status=200)
+        except Todo.DoesNotExist:
+            return Response(None, status=400)
     
     def patch(self, request, todo_pk):
-        todo_item = Todo.objects.get(pk=todo_pk)
-        serializer = TodoSerializer(todo_item, data=request.data, partial=True)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data)
-        return Response(serializer.errors, status=400)
+        try:
+            todo_item = Todo.objects.get(pk=todo_pk)
+            serializer = TodoSerializer(todo_item, data=request.data, partial=True)
+            if serializer.is_valid():
+                serializer.save()
+                return Response(serializer.data)
+            return Response(serializer.errors, status=400)
+        except Todo.DoesNotExist:
+            return Response(None, status= 400)
 
     def delete(self, request, todo_pk):
         Todo.objects.get(pk=todo_pk).delete()
