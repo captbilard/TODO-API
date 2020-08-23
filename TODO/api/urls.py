@@ -1,12 +1,13 @@
 from django.urls import path, include
-from rest_framework import routers
+# from rest_framework import routers
 
-from .views import TodoListView
+from . import views
 
-router = routers.SimpleRouter()
+# router = routers.SimpleRouter()
 
-router.register('todos', TodoListView)
+# router.register('todos', TodoListView)
 
 urlpatterns = [
-    path('', include(router.urls))
+    path('', views.TodoList.as_view()),
+    path('<int:todo_pk>/', views.TodoOne.as_view(), name='todo_one'),
 ]

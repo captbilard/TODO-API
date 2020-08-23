@@ -4,9 +4,9 @@ from django.db import models
 
 class Todo(models.Model):
     title = models.CharField(max_length=500)
-    completed = models.BooleanField()
-    url = models.CharField(max_length=500)
-    order = models.IntegerField()
+    completed = models.BooleanField(null=True)
+    url = models.CharField(max_length=500, null=True)
+    order = models.IntegerField(null=True)
 
     def __str__(self):
-        self.title
+        return self.title
